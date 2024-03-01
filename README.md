@@ -1,41 +1,18 @@
-# ExamSurveillance
-This is my Mini Project on Exam Surveillance System for understanding students behaviour while in exam.
+Dependencies
+OpenCV (cv2): Used for capturing video from the webcam and for face and eye detection using Haar cascades.
+Multiprocessing (multiprocessing): Utilized to run the webcam capture and logging processes concurrently.
+Matplotlib (matplotlib): Used for visualization purposes, including plotting the analysis results.
 
-# Dependencies 
-dependencies are given in env_setup.sh
+###Usage###
+Run the script.
+Ensure that a webcam is connected and functioning properly.
+The script will display the webcam feed with detected faces and eyes.
+Analysis results will be printed in the console.
+Log files containing analysis data will be generated for further analysis.
 
-```
-make your way to the current directory
-chmod +x env_setup.sh
-./env_setup.sh
-```
-this will install dependencies required 
+Notes
+Haar cascade classifiers (haarcascade_frontalface_default.xml and haarcascade_eye_tree_eyeglasses.xml) are used for face and eye detection. Make sure these files are present in the working directory or provide correct paths to them.
+Modify the code to adjust parameters such as the scale factor and minimum neighbors for better face and eye detection based on your requirements.
 
-# Run Project
-```
-make your way to the current directory and open terminal 
-python3 runexam.py
-```
-this will execute the project
-```
-you will see first a empty graph close the graph 
-give your exam, when exam is over click on frame and press 'q' for stop the detection
-```
-# Scrrenshots
-## Face and Eyes Detection
-![Landing Page](https://github.com/AadityaDeshpande/ExamSurveillance/blob/master/Screenshot%20from%202019-09-11%2023-15-57.png)
-
-This is done by using Harr Cascade Classifier for feature extraction.
-
-## Screen Look
-![Landing Page](https://github.com/AadityaDeshpande/ExamSurveillance/blob/master/Screenshot%20from%202019-09-15%2020-27-14.png)
-
-person looking at a screen.
-
-## Multiple Face Detection
-![Landing Page](https://github.com/AadityaDeshpande/ExamSurveillance/blob/master/Screenshot%20from%202019-08-31%2012-43-50.png)
-
-detected multiple faces looking at a screen.
-
-### project developed by
-#### Aaditya Deshpande :)
+###Author###
+This script was created by an anonymous author for educational and research purposes.
