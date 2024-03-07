@@ -11,9 +11,8 @@ matplotlib.use('TkAgg')  # or any other backend that works for you
 import time
 import csv
 
-#from graph import bargraph
 import sys
-from logger import log,initlogger
+from logger import log, initlogger
 from line import liner
 from analysis import analysisCSV
 
@@ -24,11 +23,10 @@ def exam():
     frame_no = 0
     look_screen = 0
     look_away = 0
+    suspicious_behavior = 0
 
     # Create the haar cascade
-
     faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
-
     eyesCascade = cv2.CascadeClassifier("haarcascade_eye_tree_eyeglasses.xml")
 
     while True:
@@ -39,48 +37,51 @@ def exam():
             break
 
         frame_no += 1
-        #print("Current Frame number is: ", frame_no)
-
-        # Our operations on the frame come here
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
         # Detect faces in the image
         faces = faceCascade.detectMultiScale(
             gray,
-            scaleFactor=1.25,    # 1.25 1.1 perfect-> 1.25
-            minNeighbors=9,      # 5  9-> only single face
-            minSize=(30, 30)     # 30 30
-                                # flags = cv2.CV_HAAR_SCALE_IMAGE
+            scaleFactor=1.25,
+            minNeighbors=9,
+            minSize=(30, 30)
         )
+
         for (x, y, w, h) in faces:
-
             cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 255, 0), 2)
-
-            #croping face and finding eyes only in that region
             roi_gray = gray[y:y+h, x:x+w]
             roi_color = frame[y:y+h, x:x+w]
 
-
+            # Detect eyes within the face region
             eyes = eyesCascade.detectMultiScale(
-                gray,
-                scaleFactor=1.22,     # perfect -> 1.2 |1.3 1.1
-                minNeighbors=7,       # perfect->4 5
-                minSize=(30, 30)      # 30 30
-                                    # flags = cv2.CV_HAAR_SCALE_IMAGE)
-                )
+                roi_gray,
+                scaleFactor=1.22,
+                minNeighbors=7,
+                minSize=(30, 30)
+            )
 
             for (ex, ey, ew, eh) in eyes:
-                cv2.rectangle(frame, (ex, ey), (ex+ew, ey+eh), (138,43,226), 2)
+                cv2.rectangle(frame, (x+ex, y+ey), (x+ex+ew, y+ey+eh), (138,43,226), 2)
 
-        #if len(faces) >= 1:
-        if len(eyes) == 2:
-            print("STATUS ", frame_no, " : person READING AL KAHFI")
-            look_screen += 1
-        elif len(eyes) == 0:
-            print("STATUS ", frame_no, " : NO EYES DETECTED")
-        elif len(eyes) == 1:
-            print("STATUS ", frame_no, " : person LOOKING AWAY")
-            look_away += 1
+        # Analyze face direction for suspicious behavior
+        if len(faces) >= 1:
+            for (x, y, w, h) in faces:
+                # Calculate face center
+                face_center_x = x + w // 2
+                face_center_y = y + h // 2
+
+                # Check if the face is looking down
+                if face_center_y > frame.shape[0] * 2 // 3:
+                    print("STATUS ", frame_no, " : person FOCUSING ON EXAM")
+                    look_screen += 1
+                else:
+                    print("STATUS ", frame_no, " : person LOOKING AWAY (Not Focused)")
+                    look_away += 1
+
+                # Check if the face is shifted left or right
+                if face_center_x < frame.shape[1] // 3 or face_center_x > frame.shape[1] * 2 // 3:
+                    print("STATUS ", frame_no, " : SUSPICIOUS BEHAVIOR (Face Shifted)")
+                    suspicious_behavior += 1
 
         # Display the resulting frame
         cv2.imshow('frame', frame)
@@ -90,6 +91,12 @@ def exam():
     # When everything done, release the capture
     cap.release()
     cv2.destroyAllWindows()
+
+    # Print analysis results
+    print("Total frames analyzed:", frame_no)
+    print("Number of times focused on exam:", look_screen)
+    print("Number of times looking away:", look_away)
+    print("Number of instances of suspicious behavior:", suspicious_behavior)
 
 def p2():
     '''Creating a Log files about student analysis'''
