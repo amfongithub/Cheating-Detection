@@ -25,6 +25,8 @@ def exam():
     look_away = 0
     suspicious_behavior = 0
 
+    start_time = time.time()
+
     # Create the haar cascade
     faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
     eyesCascade = cv2.CascadeClassifier("haarcascade_eye_tree_eyeglasses.xml")
@@ -74,14 +76,26 @@ def exam():
                 if face_center_y > frame.shape[0] * 2 // 3:
                     print("STATUS ", frame_no, " : fokus di lembar jawaban")
                     look_screen += 1
+                    
                 else:
-                    print("STATUS ", frame_no, " : siswa melihat diluar lembar jawaban (tidak fokus)")
+                    # print("STATUS ", frame_no, " : siswa melihat diluar lembar jawaban (tidak fokus)")
                     look_away += 1
+                    while look_away < 1000000:
+                        look_away += 1
+                    end_time = time.time()  # Membuat timestamp akhir
+                    elapsed_time = end_time - start_time  # Menghitung selisih waktu
+                    print("STATUS ", frame_no, " : siswa melihat diluar lembar jawaban (tidak fokus)","dengan durasi", elapsed_time,"detik")
 
                 # Check if the face is shifted left or right
                 if face_center_x < frame.shape[1] // 3 or face_center_x > frame.shape[1] * 2 // 3:
-                    print("STATUS ", frame_no, " : Pergerakan mencurigakan (Dicurigai menyontek)")
+                    # print("STATUS ", frame_no, " : Pergerakan mencurigakan (Dicurigai menyontek)")
                     suspicious_behavior += 1
+                    while suspicious_behavior < 1000000:
+                        suspicious_behavior += 1
+                    end_time = time.time()  # Membuat timestamp akhir
+                    elapsed_time = end_time - start_time  # Menghitung selisih waktu
+                    print("STATUS ", frame_no, " : Pergerakan mencurigakan (Dicurigai menyontek)", "dengan durasi", elapsed_time,"detik")
+
 
         # Display the resulting frame
         cv2.imshow('frame', frame)
