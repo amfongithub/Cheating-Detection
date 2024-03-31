@@ -72,15 +72,15 @@ def exam():
 
                 # Check if the face is looking down
                 if face_center_y > frame.shape[0] * 2 // 3:
-                    print("STATUS ", frame_no, " : person FOCUSING ON EXAM")
+                    print("STATUS ", frame_no, " : fokus di lembar jawaban")
                     look_screen += 1
                 else:
-                    print("STATUS ", frame_no, " : person LOOKING AWAY (Not Focused)")
+                    print("STATUS ", frame_no, " : siswa melihat diluar lembar jawaban (tidak fokus)")
                     look_away += 1
 
                 # Check if the face is shifted left or right
                 if face_center_x < frame.shape[1] // 3 or face_center_x > frame.shape[1] * 2 // 3:
-                    print("STATUS ", frame_no, " : SUSPICIOUS BEHAVIOR (Face Shifted)")
+                    print("STATUS ", frame_no, " : Pergerakan mencurigakan (Dicurigai menyontek)")
                     suspicious_behavior += 1
 
         # Display the resulting frame
