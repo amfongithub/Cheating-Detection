@@ -74,8 +74,13 @@ def exam():
 
                 # Check if the face is looking down
                 if face_center_y > frame.shape[0] * 2 // 3:
-                    print("STATUS ", frame_no, " : fokus di lembar jawaban")
+                    # print("STATUS ", frame_no, " : fokus di lembar jawaban")
                     look_screen += 1
+                    while look_screen < 1000000:
+                        look_screen += 1
+                    end_time = time.time()  # Membuat timestamp akhir
+                    elapsed_time = end_time - start_time  # Menghitung selisih waktu
+                    print("STATUS ", frame_no, " : siswa fokus di lembar jawaban","dengan durasi", elapsed_time,"detik")
                     
                 else:
                     # print("STATUS ", frame_no, " : siswa melihat diluar lembar jawaban (tidak fokus)")
@@ -143,5 +148,5 @@ if __name__ == '__main__':
 
     print("\nBlue line = frame number\nGreen line = number of time screen look")
     print("Orange line = number of time away look")
-    analysisCSV()
-    liner('stdlog.csv')
+    # analysisCSV()
+    # liner('stdlog.csv')
