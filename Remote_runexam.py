@@ -67,21 +67,28 @@ def exam():
 
         # Analyze face direction for suspicious behavior
         if len(faces) >= 1:
-            data_array = [[1, 'John', 'New York'],[2, 'Jane', 'Los Angeles'],[3, 'Doe', 'Chicago']]
 
-            def simpan_ke_csv(nama_file, data):
-            # Tulis data ke dalam file CSV
-                with open(nama_file, 'a', newline='') as file:  # Mode 'a' untuk menambahkan data ke file yang sudah ada
-                    writer = csv.writer(file)
-                    for row in data:
-                        writer.writerow(row)
-                        print("Data berhasil ditambahkan ke", nama_file)
-            # Panggil fungsi untuk menyimpan data ke dalam file CSV
-            simpan_ke_csv('data.csv', data_array)
+            # data_array = [[1, 'John', 'New York'],[2, 'Jane', 'Los Angeles'],[3, 'Doe', 'Chicago']]
+            # def simpan_ke_csv(nama_file, data):
+            # # Tulis data ke dalam file CSV
+            #     with open(nama_file, 'a', newline='') as file:  # Mode 'a' untuk menambahkan data ke file yang sudah ada
+            #         writer = csv.writer(file)
+            #         for row in data:
+            #             writer.writerow(row)
+            #             print("Data berhasil ditambahkan ke", nama_file)
+            # # Panggil fungsi untuk menyimpan data ke dalam file CSV
+            # simpan_ke_csv('data.csv', data_array)
+
+            
             for (x, y, w, h) in faces:
                 # Calculate face center
                 face_center_x = x + w // 2
                 face_center_y = y + h // 2
+                lihat_kertas = '';
+                menoleh = '';
+                dicurigai = '';
+
+
 
                 # Check if the face is looking down
                 if face_center_y > frame.shape[0] * 2 // 3:
@@ -91,24 +98,7 @@ def exam():
                         look_screen += 1
                     end_time = time.time()  # Membuat timestamp akhir
                     elapsed_time = end_time - start_time  # Menghitung selisih waktu
-                    print("STATUS ", frame_no, " : siswa fokus di lembar jawaban","dengan durasi", elapsed_time,"detik")
-
-                    data_array = [
-                        [1, 'John', 'New York'],
-                        [2, 'Jane', 'Los Angeles'],
-                        [3, 'Doe', 'Chicago']
-                    ]
-
-                    def simpan_ke_csv(nama_file, data):
-                        # Tulis data ke dalam file CSV
-                        with open(nama_file, 'a', newline='') as file:  # Mode 'a' untuk menambahkan data ke file yang sudah ada
-                            writer = csv.writer(file)
-                            for row in data:
-                                writer.writerow(row)
-                        print("Data berhasil ditambahkan ke", nama_file)
-
-                    # Panggil fungsi untuk menyimpan data ke dalam file CSV
-                    simpan_ke_csv('data.csv', data_array)
+                    lihat_kertas = ("STATUS ", frame_no, " : siswa fokus di lembar jawaban","dengan durasi", elapsed_time,"detik")
                     
                 else:
                     # print("STATUS ", frame_no, " : siswa melihat diluar lembar jawaban (tidak fokus)")
@@ -117,7 +107,7 @@ def exam():
                         look_away += 1
                     end_time = time.time()  # Membuat timestamp akhir
                     elapsed_time = end_time - start_time  # Menghitung selisih waktu
-                    print("STATUS ", frame_no, " : siswa melihat diluar lembar jawaban (tidak fokus)","dengan durasi", elapsed_time,"detik")
+                    menoleh = ("STATUS ", frame_no, " : siswa melihat diluar lembar jawaban (tidak fokus)","dengan durasi", elapsed_time,"detik")
 
                 # Check if the face is shifted left or right
                 if face_center_x < frame.shape[1] // 3 or face_center_x > frame.shape[1] * 2 // 3:
@@ -127,7 +117,19 @@ def exam():
                         suspicious_behavior += 1
                     end_time = time.time()  # Membuat timestamp akhir
                     elapsed_time = end_time - start_time  # Menghitung selisih waktu
-                    print("STATUS ", frame_no, " : Pergerakan mencurigakan (Dicurigai menyontek)", "dengan durasi", elapsed_time,"detik")
+                    dicurigai = ("STATUS ", frame_no, " : Pergerakan mencurigakan (Dicurigai menyontek)", "dengan durasi", elapsed_time,"detik")
+            
+                print(lihat_kertas,menoleh,dicurigai)
+                data_array = [lihat_kertas,menoleh,dicurigai]
+                def simpan_ke_csv(nama_file, data):
+                # Tulis data ke dalam file CSV
+                    with open(nama_file, 'a', newline='') as file:  # Mode 'a' untuk menambahkan data ke file yang sudah ada
+                        writer = csv.writer(file)
+                        for row in data:
+                            writer.writerow(row)
+                            print("Data berhasil ditambahkan ke", nama_file)
+                # Panggil fungsi untuk menyimpan data ke dalam file CSV
+                simpan_ke_csv('data.csv', data_array)
 
 
         # Display the resulting frame
