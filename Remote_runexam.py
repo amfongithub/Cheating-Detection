@@ -79,14 +79,21 @@ def exam():
             # # Panggil fungsi untuk menyimpan data ke dalam file CSV
             # simpan_ke_csv('data.csv', data_array)
 
-            
+            frame_no_array = []
+            status_array = []
+            elapsed_time_array = []
             for (x, y, w, h) in faces:
                 # Calculate face center
                 face_center_x = x + w // 2
                 face_center_y = y + h // 2
+
                 lihat_kertas = '';
                 menoleh = '';
                 dicurigai = '';
+
+                look_paper = 0
+                away_look = 1
+                chatting_indc = 2
 
 
 
@@ -98,7 +105,10 @@ def exam():
                         look_screen += 1
                     end_time = time.time()  # Membuat timestamp akhir
                     elapsed_time = end_time - start_time  # Menghitung selisih waktu
-                    lihat_kertas = ("STATUS ", frame_no, " : siswa fokus di lembar jawaban","dengan durasi", elapsed_time,"detik")
+                    lihat_kertas = frame_no, look_paper,elapsed_time
+                    frame_no_array.append(frame_no)
+                    status_array.append(look_paper)
+                    elapsed_time_array.append(elapsed_time)
                     
                 else:
                     # print("STATUS ", frame_no, " : siswa melihat diluar lembar jawaban (tidak fokus)")
@@ -107,7 +117,10 @@ def exam():
                         look_away += 1
                     end_time = time.time()  # Membuat timestamp akhir
                     elapsed_time = end_time - start_time  # Menghitung selisih waktu
-                    menoleh = ("STATUS ", frame_no, " : siswa melihat diluar lembar jawaban (tidak fokus)","dengan durasi", elapsed_time,"detik")
+                    menoleh = frame_no,away_look,elapsed_time
+                    frame_no_array.append(frame_no)
+                    status_array.append(away_look)
+                    elapsed_time_array.append(elapsed_time)
 
                 # Check if the face is shifted left or right
                 if face_center_x < frame.shape[1] // 3 or face_center_x > frame.shape[1] * 2 // 3:
@@ -117,19 +130,26 @@ def exam():
                         suspicious_behavior += 1
                     end_time = time.time()  # Membuat timestamp akhir
                     elapsed_time = end_time - start_time  # Menghitung selisih waktu
-                    dicurigai = ("STATUS ", frame_no, " : Pergerakan mencurigakan (Dicurigai menyontek)", "dengan durasi", elapsed_time,"detik")
+                    dicurigai = frame_no,chatting_indc,elapsed_time
+                    frame_no_array.append(frame_no)
+                    status_array.append(chatting_indc)
+                    elapsed_time_array.append(elapsed_time)
             
-                print(lihat_kertas,menoleh,dicurigai)
-                data_array = [lihat_kertas,menoleh,dicurigai]
-                def simpan_ke_csv(nama_file, data):
-                # Tulis data ke dalam file CSV
-                    with open(nama_file, 'a', newline='') as file:  # Mode 'a' untuk menambahkan data ke file yang sudah ada
-                        writer = csv.writer(file)
-                        for row in data:
-                            writer.writerow(row)
-                            print("Data berhasil ditambahkan ke", nama_file)
-                # Panggil fungsi untuk menyimpan data ke dalam file CSV
-                simpan_ke_csv('data.csv', data_array)
+                print(status_array,elapsed_time_array)
+                # data_array = [
+                #               [lihat_kertas],
+                #               [menoleh],
+                #               [dicurigai]
+                #              ]
+                # def simpan_ke_csv(nama_file, data):
+                # # Tulis data ke dalam file CSV
+                #     with open(nama_file, 'a', newline='') as file:  # Mode 'a' untuk menambahkan data ke file yang sudah ada
+                #         writer = csv.writer(file)
+                #         for row in data:
+                #             writer.writerow(row)
+                #             # print("Data berhasil ditambahkan ke", nama_file)
+                # # Panggil fungsi untuk menyimpan data ke dalam file CSV
+                # simpan_ke_csv('data.csv', data_array)
 
 
         # Display the resulting frame
