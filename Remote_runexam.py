@@ -7,14 +7,15 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from matplotlib import style
 matplotlib.use('TkAgg')  # or any other backend that works for you
-
+from matplotlib.animation import FuncAnimation
+from itertools import count
+    
 import time
 import csv
 
 import sys
 from logger import log, initlogger
-from line import liner
-from analysis import analysisCSV
+
 
 def exam():
     cap = cv2.VideoCapture(0)  # Use index 0 for the default webcam
@@ -101,7 +102,7 @@ def exam():
                 if face_center_y > frame.shape[0] * 2 // 3:
                     # print("STATUS ", frame_no, " : fokus di lembar jawaban")
                     look_screen += 1
-                    while look_screen < 1000000:
+                    while look_screen < 10000:
                         look_screen += 1
                     end_time = time.time()  # Membuat timestamp akhir
                     elapsed_time = end_time - start_time  # Menghitung selisih waktu
@@ -113,7 +114,7 @@ def exam():
                 else:
                     # print("STATUS ", frame_no, " : siswa melihat diluar lembar jawaban (tidak fokus)")
                     look_away += 1
-                    while look_away < 1000000:
+                    while look_away < 10000:
                         look_away += 1
                     end_time = time.time()  # Membuat timestamp akhir
                     elapsed_time = end_time - start_time  # Menghitung selisih waktu
@@ -126,7 +127,7 @@ def exam():
                 if face_center_x < frame.shape[1] // 3 or face_center_x > frame.shape[1] * 2 // 3:
                     # print("STATUS ", frame_no, " : Pergerakan mencurigakan (Dicurigai menyontek)")
                     suspicious_behavior += 1
-                    while suspicious_behavior < 1000000:
+                    while suspicious_behavior < 10000:
                         suspicious_behavior += 1
                     end_time = time.time()  # Membuat timestamp akhir
                     elapsed_time = end_time - start_time  # Menghitung selisih waktu
@@ -136,31 +137,13 @@ def exam():
                     elapsed_time_array.append(elapsed_time)
             
                 print(status_array,elapsed_time_array)
-                # data_array = [
-                #               [lihat_kertas],
-                #               [menoleh],
-                #               [dicurigai]
-                #              ]
-                # def simpan_ke_csv(nama_file, data):
-                # # Tulis data ke dalam file CSV
-                #     with open(nama_file, 'a', newline='') as file:  # Mode 'a' untuk menambahkan data ke file yang sudah ada
-                #         writer = csv.writer(file)
-                #         for row in data:
-                #             writer.writerow(row)
-                #             # print("Data berhasil ditambahkan ke", nama_file)
-                # # Panggil fungsi untuk menyimpan data ke dalam file CSV
-                # simpan_ke_csv('data.csv', data_array)
-
-
         # Display the resulting frame
         cv2.imshow('frame', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-
-    # When everything done, release the capture
+        
     cap.release()
     cv2.destroyAllWindows()
-
     # Print analysis results
     print("Total frames analyzed:", frame_no)
     print("Number of times focused on exam:", look_screen)
@@ -176,11 +159,11 @@ def p2():
 if __name__ == '__main__':
     glob = multiprocessing.Array('i', 4)
     # 0th location contains frame_no 1st-> look_away 2nd -> look_screen
-
+    
     exam_process = Process(target=exam)
-    log_process = Process(target=p2)
+    # log_process = Process(target=p2)
 
-    print("Preparing...")
+    print("Sistem dipersiapkan...")
     sys.stdout.flush()
     time.sleep(1)
 
@@ -189,14 +172,12 @@ if __name__ == '__main__':
 
     initlogger()
 
-    log_process.start()
+    # log_process.start()
 
     exam_process.join()
 
-    if not exam_process.is_alive():
-        log_process.terminate()
+    # if not exam_process.is_alive():
+    #     log_process.terminate()
 
-    print("\nBlue line = frame number\nGreen line = number of time screen look")
-    print("Orange line = number of time away look")
-    # analysisCSV()
-    # liner('stdlog.csv')
+    # print("\nBlue line = frame number\nGreen line = number of time screen look")
+    # print("Orange line = number of time away look")
