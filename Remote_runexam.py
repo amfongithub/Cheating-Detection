@@ -49,9 +49,14 @@ def exam():
             minNeighbors=9,
             minSize=(30, 30)
         )
-
         for (x, y, w, h) in faces:
-            cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 255, 0), 2)
+            image = cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 255, 0), 2)
+            text = "Fokus : 33% \n Menoleh: 33% \n Curang: 33%"
+            y0, dy = 80, 20
+            for i, line in enumerate(text.split('\n')):
+                y = y0 + i*dy
+                cv2.putText(image, line,  (x-4, y-1), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 255, 0), 2)
+            
             roi_gray = gray[y:y+h, x:x+w]
             roi_color = frame[y:y+h, x:x+w]
 
