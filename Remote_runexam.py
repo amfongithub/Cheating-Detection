@@ -25,6 +25,10 @@ def exam():
     look_screen = 0
     look_away = 0
     suspicious_behavior = 0
+    
+    frame_no_array = []
+    status_array = []
+    elapsed_time_array = []
 
     start_time = time.time()
 
@@ -50,12 +54,21 @@ def exam():
             minSize=(30, 30)
         )
         for (x, y, w, h) in faces:
+            nilai = status_array
+            hasil_perhitungan = len(elapsed_time_array)
             image = cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 255, 0), 2)
-            text = "Fokus : 33% \n Menoleh: 33% \n Curang: 33%"
-            y0, dy = 80, 20
-            for i, line in enumerate(text.split('\n')):
-                y = y0 + i*dy
-                cv2.putText(image, line,  (x-4, y-1), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 255, 0), 2)
+            # text = "Fokus : 33% \n Menoleh: 33% \n Curang: 33%"
+            # y0, dy = 80, 20
+            # cv2.putText(image, text,  (x-4, y-1), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 255, 0), 2)
+            text = str( hasil_perhitungan)
+            fontFace = cv2.FONT_HERSHEY_SIMPLEX
+            fontScale = 1
+            color = (255, 0, 0)  # Blue color
+            thickness = 2
+            org = (50, 50)  # Bottom-left corner of the text
+
+            # Put the text on the image
+            cv2.putText(image, text, org, fontFace, fontScale, color, thickness)
             
             roi_gray = gray[y:y+h, x:x+w]
             roi_color = frame[y:y+h, x:x+w]
@@ -85,9 +98,9 @@ def exam():
             # # Panggil fungsi untuk menyimpan data ke dalam file CSV
             # simpan_ke_csv('data.csv', data_array)
 
-            frame_no_array = []
-            status_array = []
-            elapsed_time_array = []
+            # frame_no_array = []
+            # status_array = []
+            # elapsed_time_array = []
             for (x, y, w, h) in faces:
                 # Calculate face center
                 face_center_x = x + w // 2
