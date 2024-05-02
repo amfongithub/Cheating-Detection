@@ -55,20 +55,40 @@ def exam():
         )
         for (x, y, w, h) in faces:
             nilai = status_array
-            hasil_perhitungan = len(elapsed_time_array)
-            image = cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 255, 0), 2)
-            # text = "Fokus : 33% \n Menoleh: 33% \n Curang: 33%"
-            # y0, dy = 80, 20
-            # cv2.putText(image, text,  (x-4, y-1), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 255, 0), 2)
-            text = str( hasil_perhitungan)
-            fontFace = cv2.FONT_HERSHEY_SIMPLEX
-            fontScale = 1
-            color = (255, 0, 0)  # Blue color
-            thickness = 2
-            org = (50, 50)  # Bottom-left corner of the text
+            # hasil_perhitungan = len(elapsed_time_array)
+            
+            # data = [10, 20, 30, 40, 50]
 
-            # Put the text on the image
-            cv2.putText(image, text, org, fontFace, fontScale, color, thickness)
+            # Menghitung jumlah data
+            jumlah_data = len(nilai)
+
+            # Menghitung total nilai dari semua data
+            total_nilai = sum(nilai)
+
+            # Menghitung persentase setiap data terhadap total nilai
+            persentase_data = [(nilai / total_nilai) * 100 for nilai in nilai]
+
+            # Menampilkan hasil
+            print("Jumlah data:", jumlah_data)
+            print("Total nilai:", total_nilai)
+            print("Persentase setiap data terhadap total nilai:")
+            for i, persentase in enumerate(persentase_data):
+                ctk = (f"Data ke-{i+1}: {persentase:.2f}%")
+            
+            
+                image = cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 255, 0), 2)
+                # text = "Fokus : 33% \n Menoleh: 33% \n Curang: 33%"
+                # y0, dy = 80, 20
+                # cv2.putText(image, text,  (x-4, y-1), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 255, 0), 2)
+                text = ctk # nilai mau dicek berkala lalu di cetak
+                fontFace = cv2.FONT_HERSHEY_SIMPLEX
+                fontScale = 1
+                color = (255, 0, 0)  # Blue color
+                thickness = 2
+                org = (50, 50)  # Bottom-left corner of the text
+
+                # Put the text on the image
+                cv2.putText(image, text, org, fontFace, fontScale, color, thickness)
             
             roi_gray = gray[y:y+h, x:x+w]
             roi_color = frame[y:y+h, x:x+w]
