@@ -55,32 +55,49 @@ def exam():
         )
         for (x, y, w, h) in faces:
             nilai = status_array
+            
+            
+            count_0 = nilai.count(0)
+            count_1 = nilai.count(1)
+            count_2 = nilai.count(2)
             # hasil_perhitungan = len(elapsed_time_array)
             
             # data = [10, 20, 30, 40, 50]
 
             # Menghitung jumlah data
-            jumlah_data = len(nilai)
+            # jumlah_data = len(nilai)
 
             # Menghitung total nilai dari semua data
             total_nilai = sum(nilai)
 
             # Menghitung persentase setiap data terhadap total nilai
-            persentase_data = [(nilai / total_nilai) * 100 for nilai in nilai]
-
-            # Menampilkan hasil
-            print("Jumlah data:", jumlah_data)
-            print("Total nilai:", total_nilai)
-            print("Persentase setiap data terhadap total nilai:")
-            for i, persentase in enumerate(persentase_data):
-                ctk = (f"Data ke-{i+1}: {persentase:.2f}%")
+            # persentase_data = [(nilai / total_nilai) * 100 for nilai in nilai]
             
+            persentase_data_0 = []
+            persentase_data_1 = []
+            persentase_data_2 = []
             
+            if total_nilai != 0:
+                persentase_data_0 = [(count_0 / total_nilai) * 100  for nilai in nilai]
+                persentase_data_1 = [(count_1 / total_nilai) * 100  for nilai in nilai]
+                persentase_data_2 = [(count_2 / total_nilai) * 100  for nilai in nilai]
+                 # Menampilkan hasil
+                # print("Jumlah data:", jumlah_data)
+                # print("Total nilai:", total_nilai)
+                # print("Persentase setiap data terhadap total nilai:")
+                for i, persentase_data_0 in enumerate(persentase_data_0):
+                    ctk0 = (f"Fokus:{persentase_data_0:.2f}%")
+                for i, persentase_data_1 in enumerate(persentase_data_1):
+                    ctk1 = (f"Menoleh:{persentase_data_1:.2f}%")
+                for i, persentase_data_2 in enumerate(persentase_data_2):
+                    ctk2 = (f"Curang:{persentase_data_2:.2f}%")
+                    
+                    
                 image = cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 255, 0), 2)
                 # text = "Fokus : 33% \n Menoleh: 33% \n Curang: 33%"
                 # y0, dy = 80, 20
                 # cv2.putText(image, text,  (x-4, y-1), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 255, 0), 2)
-                text = ctk # nilai mau dicek berkala lalu di cetak
+                text = "{},{}, {}".format(ctk0, ctk1, ctk2) # nilai mau dicek berkala lalu di cetak
                 fontFace = cv2.FONT_HERSHEY_SIMPLEX
                 fontScale = 1
                 color = (255, 0, 0)  # Blue color
@@ -89,6 +106,14 @@ def exam():
 
                 # Put the text on the image
                 cv2.putText(image, text, org, fontFace, fontScale, color, thickness)
+            else:
+                # Handle the case where total_nilai is zero, for example:
+                print("Total nilai is zero. Unable to calculate percentages.")
+
+               
+            
+            
+                
             
             roi_gray = gray[y:y+h, x:x+w]
             roi_color = frame[y:y+h, x:x+w]
@@ -174,7 +199,7 @@ def exam():
                     status_array.append(chatting_indc)
                     elapsed_time_array.append(elapsed_time)
             
-                print(status_array,elapsed_time_array)
+                print([status_array],[elapsed_time_array],'\n')
         # Display the resulting frame
         cv2.imshow('frame', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
