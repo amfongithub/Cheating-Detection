@@ -57,58 +57,96 @@ def exam():
             nilai = status_array
             
             
+            # count_0 = nilai.count(0)
+            # count_1 = nilai.count(1)
+            # count_2 = nilai.count(2)
+            # # hasil_perhitungan = len(elapsed_time_array)
+            
+            # # data = [10, 20, 30, 40, 50]
+
+            # # Menghitung jumlah data
+            # # jumlah_data = len(nilai)
+
+            # # Menghitung total nilai dari semua data
+            # total_nilai = sum(nilai)
+
+            # # Menghitung persentase setiap data terhadap total nilai
+            # # persentase_data = [(nilai / total_nilai) * 100 for nilai in nilai]
+            
+            # persentase_data_0 = []
+            # persentase_data_1 = []
+            # persentase_data_2 = []
+            
+            # if total_nilai != 0:
+            #     persentase_data_0 = [(count_0 / total_nilai) * 100  for nilai in nilai]
+            #     persentase_data_1 = [(count_1 / total_nilai) * 100  for nilai in nilai]
+            #     persentase_data_2 = [(count_2 / total_nilai) * 100  for nilai in nilai]
+            #      # Menampilkan hasil
+            #     # print("Jumlah data:", jumlah_data)
+            #     # print("Total nilai:", total_nilai)
+            #     # print("Persentase setiap data terhadap total nilai:")
+            #     for i, persentase_data_0 in enumerate(persentase_data_0):
+            #         ctk0 = (f"Fokus:{persentase_data_0:.2f}%")
+            #     for i, persentase_data_1 in enumerate(persentase_data_1):
+            #         ctk1 = (f"Menoleh:{persentase_data_1:.2f}%")
+            #     for i, persentase_data_2 in enumerate(persentase_data_2):
+            #         ctk2 = (f"Curang:{persentase_data_2:.2f}%")
+            
+            
             count_0 = nilai.count(0)
             count_1 = nilai.count(1)
             count_2 = nilai.count(2)
-            # hasil_perhitungan = len(elapsed_time_array)
-            
-            # data = [10, 20, 30, 40, 50]
 
-            # Menghitung jumlah data
-            # jumlah_data = len(nilai)
-
-            # Menghitung total nilai dari semua data
             total_nilai = sum(nilai)
 
-            # Menghitung persentase setiap data terhadap total nilai
-            # persentase_data = [(nilai / total_nilai) * 100 for nilai in nilai]
-            
-            persentase_data_0 = []
-            persentase_data_1 = []
-            persentase_data_2 = []
-            
-            if total_nilai != 0:
-                persentase_data_0 = [(count_0 / total_nilai) * 100  for nilai in nilai]
-                persentase_data_1 = [(count_1 / total_nilai) * 100  for nilai in nilai]
-                persentase_data_2 = [(count_2 / total_nilai) * 100  for nilai in nilai]
-                 # Menampilkan hasil
-                # print("Jumlah data:", jumlah_data)
-                # print("Total nilai:", total_nilai)
-                # print("Persentase setiap data terhadap total nilai:")
-                for i, persentase_data_0 in enumerate(persentase_data_0):
-                    ctk0 = (f"Fokus:{persentase_data_0:.2f}%")
-                for i, persentase_data_1 in enumerate(persentase_data_1):
-                    ctk1 = (f"Menoleh:{persentase_data_1:.2f}%")
-                for i, persentase_data_2 in enumerate(persentase_data_2):
-                    ctk2 = (f"Curang:{persentase_data_2:.2f}%")
+            # Calculate percentages
+            persentase_data_0 = (count_0 / len(nilai)) * 100 if total_nilai != 0 else 0
+            persentase_data_1 = (count_1 / len(nilai)) * 100 if total_nilai != 0 else 0
+            persentase_data_2 = (count_2 / len(nilai)) * 100 if total_nilai != 0 else 0
+
+            # Normalize percentages to 100%
+            total_persentase = persentase_data_0 + persentase_data_1 + persentase_data_2
+            if total_persentase > 100:
+                normalization_factor = 100 / total_persentase
+                persentase_data_0 *= normalization_factor
+                persentase_data_1 *= normalization_factor
+                persentase_data_2 *= normalization_factor
+
+            # Prepare texts
+            ctk0 = f"Fokus: {persentase_data_0:.2f}%" if total_nilai != 0 else "Fokus: 0.00%"
+            ctk1 = f"Menoleh: {persentase_data_1:.2f}%" if total_nilai != 0 else "Menoleh: 0.00%"
+            ctk2 = f"Curang: {persentase_data_2:.2f}%" if total_nilai != 0 else "Curang: 0.00%"
                     
                     
-                image = cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 255, 0), 2)
+            image = cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 255, 0), 2)
                 # text = "Fokus : 33% \n Menoleh: 33% \n Curang: 33%"
                 # y0, dy = 80, 20
                 # cv2.putText(image, text,  (x-4, y-1), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 255, 0), 2)
-                text = "{},{}, {}".format(ctk0, ctk1, ctk2) # nilai mau dicek berkala lalu di cetak
-                fontFace = cv2.FONT_HERSHEY_SIMPLEX
-                fontScale = 1
-                color = (255, 0, 0)  # Blue color
-                thickness = 2
-                org = (50, 50)  # Bottom-left corner of the text
+                
+            var_fcs = "{}".format(ctk0) # nilai mau dicek berkala lalu di cetak
+            var_look_away = "{}".format(ctk1) # nilai mau dicek berkala lalu di cetak
+            var_ind_spcs = "{}".format(ctk2) # nilai mau dicek berkala lalu di cetak 
+                
+            fontFace = cv2.FONT_HERSHEY_SIMPLEX
+            fontScale = 1
+            color = (255, 0, 0)  # Blue color
+            thickness = 2
+            org = (50, 50)  # Bottom-left corner of the text
+                
+                
+                
+                # cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)
+            cv2.putText(image, var_fcs, (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 0, 0), 2, cv2.LINE_AA)
+                # You can add more objects and their corresponding labels here
+                # For example, you can add eyes, mouth, etc.
+            cv2.putText(image, var_look_away, (x, y-30), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2, cv2.LINE_AA)
+            cv2.putText(image, var_ind_spcs, (x, y-50), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 0, 255), 2, cv2.LINE_AA)
 
-                # Put the text on the image
-                cv2.putText(image, text, org, fontFace, fontScale, color, thickness)
-            else:
-                # Handle the case where total_nilai is zero, for example:
-                print("Total nilai is zero. Unable to calculate percentages.")
+            #     # Put the text on the image
+            #     # cv2.putText(image, text, org, fontFace, fontScale, color, thickness)
+            # else:
+            #     # Handle the case where total_nilai is zero, for example:
+            #     print("Total nilai is zero. Unable to calculate percentages.")
 
                
             
